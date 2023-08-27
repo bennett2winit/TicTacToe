@@ -20,13 +20,33 @@ def play(marker, space):
 
 # Now we define what all occurs during a turn.
 def turn(player):
-   if player == 1:
+   if (player % 2) == 0:
        marker = 'X'
-   elif player == 2:
+       name = 1
+   elif (player % 2) == 1:
        marker = 'O'
-   space = input(f"Player {player} where would you like to place your {marker}?\n")
-   play(marker, space)
+       name = 2
+   print("To see a board with numbers press n\nIf you want to exit press X\n")
+   space = input(f"Player {name} where would you like to place your {marker}?\n")
    
-board(spaces)
-turn(2)
-board(emptySpaces)
+   # Here we have input validation.
+   if space == 'x':
+       exit()
+   elif space == 'n':
+       board(spaces)
+       turn(player)
+   elif space in spaces:
+       play(marker, space)
+   else:
+       print("Please enter a valid option\n")
+       turn(player)
+
+# This is the main function of the program. Where the plan comes together.
+def main():
+    board(spaces)
+    for player in range(9):
+       turn(player)
+       board(emptySpaces)
+
+    
+main()
