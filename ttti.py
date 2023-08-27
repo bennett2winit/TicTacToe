@@ -1,16 +1,13 @@
 # Here we define the board that will be printed each time the "board" function is called
-urow = [' 1 ', '|', ' 2 ', '|', ' 3 ']
-div = '---------------'
-mrow = [' 4 ', '|', ' 5 ', '|', ' 6 ']
-brow = [' 7 ', '|', ' 8 ','|', ' 9 ']
-
+spaces = ['1','2','3','4','5','6','7','8','9']
 
 def board():
-    print(*urow)
-    print(div)
-    print(*mrow)
-    print(div)
-    print(*brow)
+    for i in range(3):
+        print(f"| {spaces[3*i]} | {spaces[3*i + 1]} | {spaces[3*i + 2]} |")
+        if i == 2:
+            print("\n")
+        else:
+            print("-" * 13)
 
 # Now we define what all occurs during a turn.
 def turn(player):
@@ -20,4 +17,5 @@ def turn(player):
        marker = ' O '
    print(f"Player {player} where would you like to place your {marker}?")
 
+board()
 turn(2)
