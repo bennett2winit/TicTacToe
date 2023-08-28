@@ -1,95 +1,72 @@
-global urow
-urow = ['   ', '|', '   ', '|', '   ']
-div = '--------------'
-global mrow
-mrow = ['   ', '|', '   ', '|', '   ']
-global lrow
-lrow = ['   ', '|', '   ', '|', '   ']
-def board():
-    print(*urow)
-    print(div)
-    print(*mrow)
-    print(div)
-    print(*lrow)
-board()
-def p1turn():
-    p1row = input("Player 1 which row would you like to place your X? (U)pper, (M)iddle, or (L)ower?\n")
-    p1col = input("Player 1 which column would you like to place your X? (1)st, (2)nd, or (3)rd?\n")
-    if p1row[0] == 'u' or p1row[0] == 'U':
-        global urow
-        if p1col == '1' and urow[0] != ' O ' and urow[0] != ' X ':
-            urow[0] = ' X '
-        elif p1col == '2' and urow[2] != ' O ' and urow[2] != ' X ':
-            urow[2] = ' X '
-        elif p1col == '3' and urow[4] != ' O ' and urow[2] != ' X ':
-            urow[4] = ' X '
+# This is the function that prints the board. It references the index of spaces to print out the value of the board.
+def board(array):
+    print("\n")
+    for i in range(3):
+        print(f"  {array[3*i]} | {array[3*i + 1]} | {array[3*i + 2]}  ")
+        if i == 2:
+            print("\n")
         else:
-            print('Please use a valid input')
-            p1turn()
-    elif p1row[0] == 'm' or p1row[0] == 'M':
-        global mrow
-        if p1col == '1' and mrow[0] != ' O ' and mrow[0] != ' X ':
-            mrow[0] = ' X '
-        elif p1col == '2' and mrow[2] != ' O ' and mrow[2] != ' X ':
-            mrow[2] = ' X '
-        elif p1col == '3' and mrow[4] != ' O ' and mrow[4] != ' X ':
-            mrow[4] = ' X '
-        else:
-            print('Please use a valid input')
-            p1turn()
-    elif p1row[0] == 'l' or p1row[0] == ' L':
-        global lrow
-        if p1col == '1' and lrow[0] != ' O ' and lrow[0] != ' X ':
-            lrow[0] = ' X '
-        elif p1col == '2' and lrow[2] != ' O ' and lrow[2] != ' X ':
-            lrow[2] = ' X '
-        elif p1col == '3' and lrow[4] != ' O ' and lrow[4] != ' X ':
-            lrow[4] = ' X '
-        else:
-            print('Please use a valid input')
-            p1turn()
+            print("-" * 13)
 
-def p2turn():
-    p2row = input("Player 2 which row would you like to place your O? (U)pper, (M)iddle, or (L)ower?\n")
-    p2col = input("Player 2 which column would you like to place your O? (1)st, (2)nd, or (3)rd?\n")
-    if p2row[0] == 'u' or p2row[0] =='U':
-        global urow
-        if p2col == '1' and urow[0] != ' O ' and urow[0] != ' X ':
-            urow[0] = ' O '
-        elif p2col == '2' and urow[2] != ' O ' and urow[2] != ' X ':
-            urow[2] = ' O '
-        elif p2col == '3' and urow[4] != ' O ' and urow[4] != ' X ':
-            urow[4] = ' O '
-        else:
-            print('Please use a valid input')
-            p2turn()
-    elif p2row[0] == 'm' or p2row[0] == 'M':
-        global mrow
-        if p2col == '1' and mrow[0] != ' O ' and mrow[0] != ' X ':
-            mrow[0] = ' O '
-        elif p2col == '2' and mrow[2] != ' O ' and mrow[2] != ' X ':
-            mrow[2] = ' O '
-        elif p2col == '3' and mrow[4] != ' O ' and mrow[4] != ' X ':
-            mrow[4] = ' O '
-        else:
-            print('Please use a valid input')
-            p2turn()
-    elif p2row[0] == 'l' or p2row[0] == 'L':
-        global lrow
-        if p2col == '1' and lrow[0] != ' O ' and lrow[0] != ' X ':
-            lrow[0] = ' O '
-        elif p2col == '2' and lrow[2] != ' O ' and lrow[2] != ' X ':
-            lrow[2] = ' O '
-        elif p2col == '3' and lrow[4] != ' O ' and lrow[4] != ' X ':
-            lrow[4] = ' O '
-        else:
-            print('Please use a valid input')
-            p2turn()
+# Here we define the function to replace the value in spaces with an X or an O.
+def play(marker, space, spaces, emptySpaces):
+    spaces[int(space) - 1] = marker 
+    emptySpaces[int(space) - 1] = marker
 
-def round():
-    p1turn()
-    board()
-    p2turn()
-    board()
-while(True):
-    round()
+# Now we define what all occurs during a turn.
+def turn(name, spaces, emptySpaces):
+   if name == 1:
+       marker = 'X'
+   elif name == 2:
+       marker = 'O'
+   print("To see a board with numbers press n\nIf you want to exit press X\n")
+   space = input(f"Player {name} where would you like to place your {marker}?\n")
+   
+   # Here we have input validation.
+   if space == 'x':
+       exit()
+   elif space == 'n':
+       board(spaces)
+       turn(name)
+   elif space in spaces:
+       play(marker, space, spaces, emptySpaces)
+   else:
+       print("Please enter a valid option\n")
+       turn(name, spaces, emptySpaces)
+
+# This function defines what to do if a player wins.
+def win(name):
+   newGame = input(f"Player {name} wins the game!\nWould you like to play again y/n?")
+   if newGame == 'y':
+      main()
+   elif newgame == 'n':
+      exit()
+
+# This is a function to check to see if a player won.
+def checkWin(name, spaces):
+    for i in [0,3,6]:
+        if spaces[i] == spaces[i + 1] and spaces[i + 1] == spaces[i + 2]:
+           win(name)
+    for i in [0,1,2]:
+        if spaces[i] == spaces[i + 3] and spaces[i + 3] == spaces[i + 6]:
+            win(name)
+    if (spaces[2] == spaces[4] and spaces[4] == spaces[6]) or (spaces[0] == spaces[4] and spaces[4] == spaces[8]):
+        win(name) 
+
+# This is the main function of the program. Where the plan comes together.
+def main():
+    spaces = ['1','2','3','4','5','6','7','8','9']
+    emptySpaces = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
+    
+    board(spaces)
+    for player in range(9):
+       if (player % 2) == 0:
+           name = 1
+       elif (player % 2) == 1:
+          name = 2
+       turn(name, spaces, emptySpaces)
+       board(emptySpaces)
+       checkWin(name, spaces)
+
+    
+main()
